@@ -1,70 +1,123 @@
-# Getting Started with Create React App
+https://www.youtube.com/watch?v=JQD-ApooNMI&list=PL-Db3tEF6pB8Am-IhCRgyGSxTalkDpUV_&index=5
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+1. npx create-react-app my-app
+2. npm install 
+node-sass       -> for mixing css syntax in js file
+                -> below are testing framework and utility
+jest
+enzyme
+jest-enzyme
+enzyme-adapter-react-16
 
-## Available Scripts
+(can downgrade react from 17 to 16; to be used with enzyme-adapter-react-16)
 
-In the project directory, you can run:
+3. create setupTests.js and provide Enzyme configuration
+Enzyme.configure({
+    adapter: new EnzymeAdapter(),
+    disableLifecycleMethods: true
+});
 
-### `npm start`
+4. Test file should follow the name conventions: test.js, spec.js
+Can be put in same folder as source or put under a separate folder 'test' with same folder structure as src
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+5. Create src/component/header
+- Put the content in index.js
+- Put the test in header.spec.js
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+6. Enzyme test suite structure
 
-### `npm test`
+////////
+describe("Test suite", () => {
+    it("test case", () => {
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    });
 
-### `npm run build`
+    it ...
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+});
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+describe ...
+////////
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+describe() function takes 2 args:
+- string: specify test suite
+- function: the test function to be implemented
+typically contains all the test cases under the suite
 
-### `npm run eject`
+it() function takes 2 args:
+- string: specify test case
+- function: the test case to be implemented
+typically test 1 possible case that could happen to check if it succeeds as expected
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+There could be multiple it() and describe() declaration in the test files
+which are corresponding to multiple test suites and cases for a component
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+7. Test if a component is rendered as expected
+- use enzyme shallow to render a component for unit test
+    /////////
+    const component = shallow(<Header {...props} />);
+    /////////
+- can print the component content with
+    /////////
+    component.debug()
+    /////////
+- test if expected class name exists:
+    /////////
+    const wrapper = component.find('.headerComponent');
+    expect(wrapper.length).toBe(1);
+    ////////
+- className in src code may change, if that changes then the test code based on className also need change
+to avoid that, we can insert the test attribute in the component
+    /////////    
+    <img data-test="logoImg" src={Logo} alt="Logo" />
+    /////////
+and find the child based on the test attribute
+    /////////
+    const wrapper = component.find(`[data-test='logoImg']`);
+    /////////
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+8. Refactor the code 
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- to create test component, to reuse among test suites
+const setUp = (props={}) => {
+    const component = shallow(<Header {...props} />);
+    return component;
+};
 
-## Learn More
+- to find test attribute
+    /////////
+    const findByTestAttribute  = (component, attr) => {
+        const wrapper = component.find(`[data-test='${attr}']`);
+        return wrapper;
+    };
+    /////////
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+9. Add the hook to the test suite, which will be executed before running a test case
+        let component;
+        beforeEach(() => {
+            component = setUp();
+        });    
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+10. Specify the prop type that a component expect
+Headline.propTypes = {
+    header: PropTypes.string,
+    desc: PropTypes.string,
+    tempArr: PropTypes.arrayOf(PropTypes.shape(
+        {
+            fname: PropTypes.string,
+            lname: PropTypes.string,
+            email: PropTypes.string,
+            age: PropTypes.number,
+            onlineStatus: PropTypes.bool,
+        }
+    ))
+};
 
-### Code Splitting
+Passing property of wrong type may lead to failure to render the component
+or printing of prop type error in the console
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+11. Testing prop types with checkPropTypes
+    const propsErr = checkPropTypes(Headline.propTypes, expectedProps, 'props', Headline.name);
+    expect(propsErr).toBeUndefined();
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+12.     
