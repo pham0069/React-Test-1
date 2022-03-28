@@ -120,4 +120,28 @@ or printing of prop type error in the console
     const propsErr = checkPropTypes(Headline.propTypes, expectedProps, 'props', Headline.name);
     expect(propsErr).toBeUndefined();
 
-12.     
+12. Create global state with Redux store
+- create RootReducer in reducers folder
+- create createStore.js
+
+////////
+import { createStore } from 'redux';
+import RootReducer from './reducers';
+
+export const store = createStore(RootReducer);
+/////////
+
+- provide the store on the app level in index.js
+
+/////////
+import { Provider } from 'react-redux';
+import { store } from './createStore';
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
+
+/////////
