@@ -146,4 +146,12 @@ ReactDOM.render(
 
 /////////
 
-13.  
+13.  Create button component with properties of text and a function to handle click
+- create test button.spec.js
+which test prop types and correct rendering
+
+14. Create list item componet to hold the posts
+- write test
+- 
+15. - Connect redux store to app
+- add shared button to the page
