@@ -155,3 +155,8 @@ which test prop types and correct rendering
 - 
 15. - Connect redux store to app
 - add shared button to the page
+- use axios to fetch data from url
+
+16. Integration test
+- moxios as test library to mock fetched data for axios
+- 
