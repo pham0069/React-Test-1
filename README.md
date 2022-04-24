@@ -164,3 +164,7 @@ which test prop types and correct rendering
 - the returned component is wrapped by <ContextProvider>
 - pass the store to App by props 'store' (disabled in redux 6 but re-enabled in redux 7)
 - use enzyme shallow function like childAt, dive to actually get the rendering of App component for testing
+
+18. Simulate event for enzyme component
+https://enzymejs.github.io/enzyme/docs/api/ShallowWrapper/simulate.html
+- to test callback on component like button
