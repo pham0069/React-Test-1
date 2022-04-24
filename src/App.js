@@ -17,15 +17,33 @@ let tempArr = [
       onlineStatus: true,
   }
 ];
+let initialState = {
+  hideBtn: false
+};
 
 class App extends Component {
+  
   constructor(props) {
     super(props);
     this.fetch = this.fetch.bind(this);
+    this.state = {
+      ...initialState
+    };
   }
-
+  
   fetch() {
     this.props.fetchPosts();
+    this.hideButton();
+  }
+
+  hideButton() {
+    this.setState({
+      hideBtn: true
+    });
+  }
+
+  toggleHideButton(hideBtn) {
+    return !hideBtn;
   }
 
   render () {
@@ -35,12 +53,13 @@ class App extends Component {
     };
 
     const { posts } = this.props;
+    const { hideBtn } = this.state;
 
     return <div className='App' data-test='appComponent'>
       <Header />
       <section className='main'>
         <Headline header='Posts' desc="Click the button to render posts" tempArr={tempArr} > </Headline>
-        <SharedButton {...configButton} />
+        {!hideBtn && <SharedButton {...configButton} /> }
         {posts.length > 0 && 
         <div>
           {posts.map((post, index) => {

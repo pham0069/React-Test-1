@@ -303,3 +303,13 @@ https://enzymejs.github.io/enzyme/docs/api/ShallowWrapper/simulate.html
     button.simulate('click');
     const callback = mockFunc.mock.calls;
     ```
+#### Test ezyme component's method
+- get class instance from created shallow component and call the class method on that instance to test
+```
+const classInstance = wrapper.instance();
+classInstance.hideButton();
+```
+
+#### husky
+- use this git hook to allow running all tests before pushing commit
+- if test fails, push will not execute

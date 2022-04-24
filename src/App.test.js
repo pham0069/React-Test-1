@@ -33,10 +33,23 @@ describe('App component', () => {
             ]
         };
         wrapper = setUp(initialState);    
-    });
+    }); 
 
     it('should render without error', () => {
         const component = findByTestAttribute(wrapper, 'appComponent');
         expect(component.length).toBe(1);
     }); 
+
+    it('method hideButton() should update state as expected', () => {
+        const classInstance = wrapper.instance();
+        classInstance.hideButton();
+        const newState = classInstance.state.hideBtn;
+        expect(newState).toBe(true);
+    });
+
+    it('method toggleHideButton() should return expected value', () => {
+        const classInstance = wrapper.instance();
+        const result = classInstance.toggleHideButton(true);
+        expect(result).toBe(false);
+    });
 })
