@@ -159,4 +159,8 @@ which test prop types and correct rendering
 
 16. Integration test
 - moxios as test library to mock fetched data for axios
-- 
+
+17. Test App which use redux connect
+- the returned component is wrapped by <ContextProvider>
+- pass the store to App by props 'store' (disabled in redux 6 but re-enabled in redux 7)
+- use enzyme shallow function like childAt, dive to actually get the rendering of App component for testing
